@@ -12,6 +12,16 @@ public sealed class ScreenCaptureService
     private readonly MonitorRegistry _registry;
     private readonly CoordinateMapper _mapper;
 
+    // PNG-only ImageSharp Configuration — avoids rooting JPEG/BMP/GIF/TGA/WebP codecs in AOT.
+    private static readonly SixLabors.ImageSharp.Configuration PngOnlyConfig = CreatePngConfig();
+
+    private static SixLabors.ImageSharp.Configuration CreatePngConfig()
+    {
+        var cfg = new SixLabors.ImageSharp.Configuration();
+        cfg.Configure(new SixLabors.ImageSharp.Formats.Png.PngConfigurationModule());
+        return cfg;
+    }
+
     public ScreenCaptureService(MonitorRegistry registry, CoordinateMapper mapper)
     {
         _registry = registry;
@@ -37,7 +47,7 @@ public sealed class ScreenCaptureService
                 throw new InvalidOperationException($"BitBlt failed for monitor {monitorIndex}.");
 
             byte[] pixels = ReadBgra(memDc, bmp, w, h);
-            using var img = Image.LoadPixelData<Bgra32>(pixels, w, h);
+            using var img = Image.LoadPixelData<Bgra32>(PngOnlyConfig, pixels, w, h);
 
             var plan = downscale
                 ? _mapper.PlanFor(w, h, monitor.Bounds.X, monitor.Bounds.Y)
