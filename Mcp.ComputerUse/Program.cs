@@ -1,9 +1,5 @@
-using Mcp.ComputerUse.Core;
 using Mcp.ComputerUse.Native;
-using Mcp.ComputerUse.Tools;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 // Defensive: ensure PerMonitorV2 even before manifest is honored.
 Win32.SetProcessDpiAwarenessContext(Win32.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
@@ -11,31 +7,6 @@ Win32.SetProcessDpiAwarenessContext(Win32.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWAR
 var opts = Mcp.ComputerUse.AppOptions.Parse(args);
 
 var builder = Host.CreateApplicationBuilder(args);
-
-// stdio MCP: stdout is reserved for the protocol. Logs must go to stderr.
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole(o => o.LogToStandardErrorThreshold = LogLevel.Trace);
-builder.Logging.SetMinimumLevel(opts.LogLevel);
-
-builder.Services
-    .AddSingleton(opts)
-    .AddSingleton<MonitorRegistry>()
-    .AddSingleton<CoordinateMapper>()
-    .AddSingleton<ScalePlanCache>()
-    .AddSingleton<ScreenshotStorage>()
-    .AddSingleton<ScreenCaptureService>()
-    .AddSingleton<VisualFlash>()
-    .AddSingleton<InputService>()
-    .AddSingleton<FileService>();
-
-builder.Services
-    .AddMcpServer()
-    .WithStdioServerTransport()
-    .WithTools<PingTools>()
-    .WithTools<MonitorTools>()
-    .WithTools<ScreenTools>()
-    .WithTools<MouseTools>()
-    .WithTools<KeyboardTools>()
-    .WithTools<FileTools>();
+Mcp.ComputerUse.HostStartup.Configure(builder, opts);
 
 await builder.Build().RunAsync();

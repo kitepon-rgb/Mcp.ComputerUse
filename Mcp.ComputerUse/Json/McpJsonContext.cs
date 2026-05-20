@@ -40,4 +40,4 @@ public sealed record ReadFileResult(string Content, string Encoding);
 [JsonSerializable(typeof(ShellResult))]
 [JsonSerializable(typeof(ReadFileResult))]
 [JsonSerializable(typeof(Rect))]
-internal partial class McpJsonContext : JsonSerializerContext;
+public partial class McpJsonContext : JsonSerializerContext;
