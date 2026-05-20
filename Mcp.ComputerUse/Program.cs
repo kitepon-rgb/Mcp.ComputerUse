@@ -21,7 +21,8 @@ builder.Services
     .AddSingleton<ScalePlanCache>()
     .AddSingleton<ScreenshotStorage>()
     .AddSingleton<ScreenCaptureService>()
-    .AddSingleton<InputService>();
+    .AddSingleton<InputService>()
+    .AddSingleton<FileService>();
 
 builder.Services
     .AddMcpServer()
@@ -30,6 +31,7 @@ builder.Services
     .WithTools<MonitorTools>()
     .WithTools<ScreenTools>()
     .WithTools<MouseTools>()
-    .WithTools<KeyboardTools>();
+    .WithTools<KeyboardTools>()
+    .WithTools<FileTools>();
 
 await builder.Build().RunAsync();
