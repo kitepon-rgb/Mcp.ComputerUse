@@ -14,6 +14,8 @@
 *.userprefs
 *.msi
 *.exe
+*.7z
+*.zip
 
 # Build results
 [Dd]ebug/
