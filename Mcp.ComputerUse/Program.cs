@@ -20,13 +20,15 @@ builder.Services
     .AddSingleton<CoordinateMapper>()
     .AddSingleton<ScalePlanCache>()
     .AddSingleton<ScreenshotStorage>()
-    .AddSingleton<ScreenCaptureService>();
+    .AddSingleton<ScreenCaptureService>()
+    .AddSingleton<InputService>();
 
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
     .WithTools<PingTools>()
     .WithTools<MonitorTools>()
-    .WithTools<ScreenTools>();
+    .WithTools<ScreenTools>()
+    .WithTools<MouseTools>();
 
 await builder.Build().RunAsync();
