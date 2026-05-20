@@ -14,6 +14,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <RootNamespace>Mcp.ComputerUse</RootNamespace>
     <AssemblyName>mcp-computeruse</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ModelContextProtocol" Version="1.3.0" />
