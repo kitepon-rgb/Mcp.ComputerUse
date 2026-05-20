@@ -4,11 +4,10 @@ public sealed class ScreenshotStorage
 {
     public string DefaultDir { get; }
 
-    public ScreenshotStorage()
+    public ScreenshotStorage(AppOptions opts)
     {
-        var fromEnv = Environment.GetEnvironmentVariable("MCP_COMPUTERUSE_SCREENSHOTS_DIR");
-        DefaultDir = !string.IsNullOrWhiteSpace(fromEnv)
-            ? Path.GetFullPath(fromEnv)
+        DefaultDir = !string.IsNullOrWhiteSpace(opts.ScreenshotsDir)
+            ? Path.GetFullPath(opts.ScreenshotsDir!)
             : Environment.CurrentDirectory;
     }
 
