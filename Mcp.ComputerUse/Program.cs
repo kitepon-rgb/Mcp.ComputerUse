@@ -24,6 +24,7 @@ builder.Services
     .AddSingleton<ScalePlanCache>()
     .AddSingleton<ScreenshotStorage>()
     .AddSingleton<ScreenCaptureService>()
+    .AddSingleton<VisualFlash>()
     .AddSingleton<InputService>()
     .AddSingleton<FileService>();
 

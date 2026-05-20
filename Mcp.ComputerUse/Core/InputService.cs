@@ -5,8 +5,13 @@ namespace Mcp.ComputerUse.Core;
 
 public sealed class InputService
 {
+    private readonly VisualFlash _flash;
+
+    public InputService(VisualFlash flash) => _flash = flash;
+
     public void MouseMoveScreen(int sx, int sy)
     {
+        _flash.At(sx, sy);
         var (nx, ny) = NormalizeToVirtualDesktop(sx, sy);
         var inputs = new[]
         {
