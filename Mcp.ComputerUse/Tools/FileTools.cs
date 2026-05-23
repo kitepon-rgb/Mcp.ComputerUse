@@ -41,17 +41,23 @@ public sealed class FileTools
     }
 
     [McpServerTool, Description("Launch a program. Returns the new process id. UseShellExecute=true so this respects file associations and PATH.")]
-    public LaunchAppResult LaunchApp(string path, string? args = null, string? workingDir = null)
+    public LaunchAppResult LaunchApp(string path, [Description("Empty string = no args.")] string args = "", [Description("Empty string = inherit current directory.")] string workingDir = "")
     {
         _log.LogDebug("tool_call tool={Tool} path={Path}", nameof(LaunchApp), path);
-        return new(_files.LaunchApp(path, args, workingDir));
+        return new(_files.LaunchApp(
+            path,
+            string.IsNullOrEmpty(args) ? null : args,
+            string.IsNullOrEmpty(workingDir) ? null : workingDir));
     }
 
     [McpServerTool, Description("Run a PowerShell command and capture stdout/stderr/exit_code. timeout_ms kills the process if exceeded.")]
-    public ShellResult Shell(string command, string? workingDir = null, int timeoutMs = 30000)
+    public ShellResult Shell(string command, [Description("Empty string = inherit current directory.")] string workingDir = "", int timeoutMs = 30000)
     {
         _log.LogDebug("tool_call tool={Tool} timeoutMs={Timeout}", nameof(Shell), timeoutMs);
-        var (code, so, se) = _files.Shell(command, workingDir, timeoutMs);
+        var (code, so, se) = _files.Shell(
+            command,
+            string.IsNullOrEmpty(workingDir) ? null : workingDir,
+            timeoutMs);
         return new ShellResult(code, so, se);
     }
 }

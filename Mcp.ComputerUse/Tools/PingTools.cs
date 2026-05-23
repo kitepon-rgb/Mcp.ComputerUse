@@ -12,9 +12,9 @@ public sealed class PingTools
     public PingTools(ILogger<PingTools> log) => _log = log;
 
     [McpServerTool, Description("Returns a hello message and server timestamp. Confirms wire connectivity.")]
-    public PingResult Ping([Description("Optional message to echo back")] string? message = null)
+    public PingResult Ping([Description("Optional message to echo back. Empty string = default 'pong'.")] string message = "")
     {
         _log.LogDebug("tool_call tool={Tool}", nameof(Ping));
-        return new(message ?? "pong", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+        return new(string.IsNullOrEmpty(message) ? "pong" : message, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
     }
 }

@@ -28,12 +28,12 @@ public sealed class ScreenTools
         [Description("Monitor index from list_monitors. 0 is typically primary.")] int monitorIndex,
         [Description("Downscale to XGA/WXGA/FWXGA (default true). Set false for 1:1 pixel coords.")] bool downscale = true,
         [Description("Convert to grayscale to reduce size (default false).")] bool grayscale = false,
-        [Description("Optional override directory to save the PNG. Defaults to current working directory or MCP_COMPUTERUSE_SCREENSHOTS_DIR.")] string? savePath = null)
+        [Description("Override directory to save the PNG. Empty string = use MCP_COMPUTERUSE_SCREENSHOTS_DIR or current working directory.")] string savePath = "")
     {
         _log.LogDebug("tool_call tool={Tool} monitor={Monitor} downscale={Downscale} grayscale={Grayscale}", nameof(Screenshot), monitorIndex, downscale, grayscale);
         var result = _capture.CaptureMonitor(monitorIndex, downscale, grayscale);
         _planCache.Set(monitorIndex, result.Plan);
-        var saved = _storage.Save(result.PngBytes, monitorIndex, savePath);
+        var saved = _storage.Save(result.PngBytes, monitorIndex, string.IsNullOrEmpty(savePath) ? null : savePath);
 
         var meta = new ScreenshotMeta(
             MonitorIndex: monitorIndex,
